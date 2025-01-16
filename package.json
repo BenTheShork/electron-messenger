@@ -1,22 +1,29 @@
 {
-  
   "name": "electron-messenger",
   "version": "1.0.0",
-  "description": "Real-time messenger app",
+  "description": "Telegram-like messenger app",
   "main": "./dist/main/index.js",
   "scripts": {
-    "start": "tsc && electron .",
-    "build": "tsc",
+    "start": "electron .",
+    "build": "tsc && parcel build src/renderer/index.html --public-url ./",
     "watch": "tsc -w",
-    "dev": "tsc && electron ."
+    "dev": "concurrently \"npm run watch\" \"parcel src/renderer/index.html\" \"electron .\""
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
+    "lucide-react": "^0.292.0"
+  },
   "devDependencies": {
-    "@types/node": "^22.10.6",
-    "electron": "^34.0.0",
-    "electron-builder": "^25.1.8",
-    "typescript": "^5.7.3"
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/node": "^20.10.0",
+    "concurrently": "^8.2.2",
+    "electron": "^28.0.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "parcel-bundler": "^1.12.5",
+    "sass": "^1.69.0",
+    "typescript": "^5.3.0"
   }
 }

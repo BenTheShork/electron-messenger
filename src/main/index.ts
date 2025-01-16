@@ -4,6 +4,7 @@ import path from 'path';
 let mainWindow: BrowserWindow | null = null;
 
 function createWindow() {
+  console.log('Creating window...');
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -13,29 +14,21 @@ function createWindow() {
     }
   });
 
-  // In development, load from localhost
-  // In production, load from file
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:3000');
-  } else {
-    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
-  }
+  console.log('Loading URL...');
 
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.webContents.openDevTools();
-  }
+  const startUrl = process.env.ELECTRON_START_URL || 'http://localhost:1234';
+  console.log('Start URL:', startUrl);
+  
+  mainWindow.loadURL(startUrl);
+  mainWindow.webContents.openDevTools();
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    console.log('Page loaded successfully');
+  });
+
+  mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
+    console.error('Failed to load:', errorCode, errorDescription);
+  });
 }
 
 app.whenReady().then(createWindow);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
-});
